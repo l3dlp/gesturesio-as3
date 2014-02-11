@@ -4,18 +4,15 @@ package
 	import flare.core.Pivot3D;
 	import flare.core.Camera3D;
 	import flare.system.Input3D;
-	
 	import flash.display.Sprite;
 	import flash.display.Bitmap;
 	import flash.events.Event;
 	import flash.ui.Mouse;
-	import flash.utils.getTimer;
-	import flash.filters.GlowFilter;
 	import flash.events.KeyboardEvent;
-	
+	// import gesturesIO main library
 	import com.gio.GIO;
+	// import gesturesIO debug library
 	import com.gio.GIODebug;
-	import com.gio.GIOEvent;
 	
 	/**
 	 * ...
@@ -25,7 +22,7 @@ package
 	{
 		// scene objects.
 		private var scene:Scene3D;
-		private var car:Pivot3D;
+		private var watch:Pivot3D;
 		
 		private var debugSprite:GIODebug;
 		
@@ -68,18 +65,21 @@ package
 			scene.camera = new Camera3D();
 			scene.camera.lookAt( 0, 0, 0 );
 			scene.autoResize = true;
-			car = scene.addChildFromFile( "./assets/watch.zf3d" );
+			watch = scene.addChildFromFile( "./assets/watch.zf3d" );
 			scene.addEventListener( Scene3D.COMPLETE_EVENT, completeEvent );
-			
+			// init gesturesIO 
 			GIO.getInstance().Init(800, 450);
+			// activate filter on right hand's x and y coordinates
 			GIO.getInstance().activateFilter("right_hand", "x");
 			GIO.getInstance().activateFilter("right_hand", "y");
-			GIO.getInstance().rescaleStage(stage.stageWidth, stage.stageHeight);
 			stage.addEventListener(Event.RESIZE, resizeListener); 
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey_Down, false, 0, true);
+			// add gesturesIO debug sprite and make it invisible
 			debugSprite = new GIODebug();
 			addChild(debugSprite);
 			debugSprite.visible = false;
+			// hitting the spacebar key will gesturesIODebug sprite from non visible to visible and vice versa
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey_Down, false, 0, true);
+			// just in case the swf is played in a different size than its original size
 			resize();
 		}
 		private function onKey_Down (event:KeyboardEvent):void {  
@@ -90,8 +90,7 @@ package
 		private function completeEvent(e:Event):void 
 		{
 			scene.removeEventListener( Scene3D.COMPLETE_EVENT, completeEvent );
-			scene.addChild( car );
-			car.y = -30;
+			scene.addChild( watch );
 			scene.addEventListener( Scene3D.RENDER_EVENT, renderEvent );
 			placeCamera();
 		}
@@ -107,25 +106,30 @@ package
 			resize();
 		}
 		private function resize():void {
+			// tell gesturesIO to map x and y coordinates to current size of swf
 			GIO.getInstance().rescaleStage(stage.stageWidth, stage.stageHeight);
 		}
 		private function renderEvent(e:Event):void 
 		{
 			var resultUpdateGestureIO:String = GIO.getInstance().updateGIOSocket();
-			
+			// we keep the possibility for the user to use his mouse
 			if ( Input3D.mouseDown ) {
 				Mouse.show();
 				newhandX = mouseX;
 				newhandY = mouseY;
 			} else {
+				// initiation of right hand at the center of the screen
 				newhandX = stage.stageWidth / 2.0;
 				newhandY = stage.stageHeight / 2.0;
 			}
 			if (resultUpdateGestureIO == "data") {
+				// getting position of right hand from gesturesIO
 				newhandX = GIO.getInstance().getJointPosition("right_hand").x;
 				newhandY = GIO.getInstance().getJointPosition("right_hand").y;
 			}
+			// the goal is to see if the right hand is in the center, on the right, the left, the top or the bottom of the screen
 			manageHandPosition();
+			// manage smooth movement of camera
 			if (endDeceleration == false) {
 				endDeceleration = manageDeceleration();
 			} else {
@@ -173,6 +177,7 @@ package
 			}
 		}
 		private function manageDeceleration():Boolean {
+			// this to have a smooth rotation
 			var returnValue:Boolean = false;
 			var mouseXDelta:Number = 0;
 			var mouseYDelta:Number = 0;
@@ -250,5 +255,4 @@ package
 			angleX += mouseYDelta;
 		}
 	}
-	
 }

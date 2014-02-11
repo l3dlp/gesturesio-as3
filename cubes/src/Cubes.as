@@ -1,28 +1,18 @@
 package  
 {
 	import flash.ui.Mouse;
-	import flare.loaders.Flare3DLoader;
-	import flare.basic.*;
-	import flare.collisions.*;
-	import flare.core.*;
-	import flare.materials.*;
-	import flare.materials.filters.*;
-	import flare.system.*;
-	import flare.utils.*;
-	import flash.display.*;
-	import flash.display3D.*;
-	import flash.events.*;
-	import flash.geom.*;
-	import flash.utils.*;
-	import flare.primitives.SkyBox;
+	import flare.basic.Scene3D;
+	import flare.core.Light3D;
+	import flare.core.Camera3D;
+	import flare.system.Input3D;
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	import flash.utils.getTimer;
+	import flash.display.Sprite;
 	// import of the GIO library
 	import com.gio.GIO;
-	// import of the GIOEvent library
-	import com.gio.GIOEvent;
 	// import of the GIO debug library
 	import com.gio.GIODebug;
-	
-	//[SWF(frameRate = 60, width = 800, height = 450, backgroundColor = 0x000000)]
 	
 	public class Cubes extends Sprite 
 	{
@@ -36,46 +26,31 @@ package
 		
 		public function Cubes() 
 		{
+			// flare3D specifics
 			scene = new Scene3D(this);
 			scene.backgroundColor = 0x00aeef;
 			scene.antialias = 2;
 			scene.autoResize = true;
 			scene.camera = new Camera3D();
-			
 			scene.camera.z = distanceZaxis;
-			
 			light = new Light3D("sun",1);
 			scene.addChild(light);
 						
 			// init GIO
 			GIO.getInstance().Init(800, 450);
-			// To add  GIOEvent support you have to add GIO.getInstance() to the stage
-			addChild(GIO.getInstance());
-			// and now add the listener
-			//addEventListener(GIOEvent.GESTURE_EVENT, onGestureEvent);
-
-			stage.addEventListener(Event.RESIZE, resizeListener); 
 			
+			// adding GIODebug sprite as invisible, a keyboard stroke will switch to visible and vice versa
 			debugSprite = new GIODebug();
 			addChild(debugSprite); 
 			debugSprite.visible = false;
-			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey_Down, false, 0, true); 
-			resizeStage();
-			scene.addEventListener( Scene3D.UPDATE_EVENT, updateEvent );
+			scene.addEventListener(Scene3D.UPDATE_EVENT, updateEvent );
 		}
 		private function onKey_Down (event:KeyboardEvent):void {  
 			if(event.keyCode == 32){ //SPACEBAR
 				debugSprite.visible = !debugSprite.visible;
 			}
         }
-		private function resizeListener (e:Event):void { 
-			resizeStage();
-		}
-		private function resizeStage():void {
-			GIO.getInstance().rescaleStage(stage.stageWidth, stage.stageHeight);
-		}
-
 		private function updateEvent(e:Event):void 
 		{
 			var resultUpdateGIO:String = GIO.getInstance().updateGIOSocket();
@@ -84,31 +59,26 @@ package
 			var rightY:Number;	
 			var rightZ:Number = 0.0;	
 			
-			
-			
+			// we move the light around so it's prettier
 			light.x = Math.cos( getTimer() / 1000 ) * 500;
 			light.y = 500
 			light.z = Math.sin( getTimer() / 1000 ) * 500;
 			
 			
 			if (resultUpdateGIO == "data") {
-				trace (GIO.getInstance().getJointPosition("right_hand").z);
+				// we have a user
 				Mouse.hide();
 				rightX = GIO.getInstance().getJointPosition("right_hand").x;
 				rightY =  GIO.getInstance().getJointPosition("right_hand").y;
 				// what we receive has been normalised: -1 = 0 ; 0 = 1 ; 1 = 2
 				// denormalisation then multiplication
 				rightZ = 800.0 * reverseNormalisation(GIO.getInstance().getJointPosition("right_hand").z);
-				
-				if ( Input3D.mouseDown ) {
-					rightX = mouseX;
-					rightY = mouseY;
-				}
-				
+				// we apply a factor to scale what we have from the center out
 				rightX = (rightX - stage.stageWidth / 2.0) * 0.88 / stage.stageWidth * 800.0;
 				rightY = -(rightY - stage.stageHeight / 2.0) * 0.88 / stage.stageHeight * 450.0;
 				createCube(rightX, rightY, rightZ);
 			} else {
+				// there is no visible user we take the mouse as input
 				Mouse.show();
 				if ( Input3D.mouseDown ) {
 					rightX = mouseX;

@@ -6,9 +6,8 @@ package
 	import flash.ui.Mouse;
 	import flash.utils.getTimer;
 	import flash.filters.GlowFilter;
-
-	import com.gio.GIO;	
-	
+	// import gesturesIO main library
+	import com.gio.GIO;
 	/**
 	 * ...
 	 * @author philippe
@@ -47,18 +46,22 @@ package
 			picCursor = new PictureCursor();
 			addChild(picCursor);
 			picCursor.visible = false;
-			
+			// init gesturesIO
 			GIO.getInstance().Init(800, 450);
+			// activate filter on right hand for the x and y coordiantes
 			GIO.getInstance().activateFilter("right_hand", "x");
 			GIO.getInstance().activateFilter("right_hand", "y");
+			// just in case the swf is resized for whatever reason
 			stage.addEventListener(Event.RESIZE, resizeListener); 
 			stage.addEventListener(Event.ENTER_FRAME, enterFrame); 
+			// in the resize handler we display the three buttons centered and aligned
 			resize();
 		}
 		private function resizeListener (e:Event):void { 
 			resize();
 		}
 		private function resize():void {
+			// inform gesturesIO that the coordinates have to be mapped to the current viewport
 			GIO.getInstance().rescaleStage(stage.stageWidth, stage.stageHeight);
 			picMenu1.x = picMenu2.x = picMenu3.x = stage.stageWidth / 2 - picMenu2.width / 2;
 			picMenu2.y = stage.stageHeight / 2 - picMenu2.height / 2;
@@ -76,7 +79,8 @@ package
 				newHandY = GIO.getInstance().getJointPosition("right_hand").y;
 				picCursor.x = newHandX - picCursor.width / 2.0;
 				picCursor.y = newHandY - picCursor.height / 2.0;
-				
+				// we will apply a glow filter to the button that the user's hand is above
+				// and make it disappear if the user keeps his hand over the button for more than two seconds
 				picMenu1.filters = [];
 				picMenu2.filters = [];
 				picMenu3.filters = [];
@@ -136,6 +140,7 @@ package
 					currentButton = -1;
 				}
 			} else {
+				// if the user moves offscreen we rebuild the menus
 				picCursor.visible = false;
 				timerClick = -1;
 				currentButton = -1;
