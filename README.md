@@ -1,5 +1,5 @@
-Gestures.IO - AS3 samples
-===========
+# GesturesIO-AS3 repository
+## Develop Gestures.IO clients with Actionscript 3
 
 Several resources to easily develop to connect to Gestures.IO in AS3:
 
@@ -9,5 +9,6 @@ Several resources to easily develop to connect to Gestures.IO in AS3:
 * __viewer3d__: a simple 3D viewer based on Flare3D, object is moved with right hand.
  
 
+### All tutorials are available online: http://gestures.io/develop
 
 Last update: 2014, Feb 12th
