@@ -10,4 +10,4 @@ Several resources to easily develop to connect to Gestures.IO in AS3:
  
 
 
-Last update: 2014, Feb 11th
+Last update: 2014, Feb 12th
