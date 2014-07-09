@@ -5,18 +5,14 @@ __[Gestures.IO](http://gestures.io/)__ simplifies the way you create gesture-bas
 In this repository, you'll find eveything you need to create new interactive contents using Actionscript 3 (through AMF Socket).
 
 
-&nbsp;
-
-### API
+## API
 
 Here is the core library:
 
 * __[api](/api)__: import the io/ folder into your project (Flash, FlashBuilder or FlashDevelop).
 
 
-&nbsp;
-
-### Samples
+## Samples
 
 And some samples' source code to quickly see how things are simple:
 
