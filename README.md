@@ -10,9 +10,12 @@ Here is the core library:
 
 And some samples' source code to quickly see how things are simple:
 
+_(FlashDevelop projects, tested with the latest 13.0 SDK from Adobe)_
+
 * __[cubes](/samples/cubes)__: a right hand (x, y and z) simple 3D sample.
 * __[flat-menu](/samples/flat-menu)__: a sample to understand how to easily create creative Xbox-like buttons.
 * __[viewer3d](/samples/viewer3d)__: a simple 3D viewer based on Flare3D, object is moved with right hand.
+
 
 &nbsp;
 
