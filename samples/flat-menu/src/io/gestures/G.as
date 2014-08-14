@@ -1,6 +1,6 @@
 ﻿/**
  * GESTURES.IO - AS3 Wrapper
- * @version 1.7.0
+ * @version 1.4.4
  * @author MediaStanza
  */
 package io.gestures 
@@ -74,7 +74,7 @@ package io.gestures
 		/*
 		 * INIT()
 		 */
-		public function init(windowW:Number, windowH:Number, portNumber:int = 1234, domainName:String = "localhost"):void
+		public function init(windowW:Number, windowH:Number, portNumber:int = 3310, domainName:String = "localhost"):void
 		{
 			this.portNumber = portNumber;
 			rescale(windowW, windowH);	
