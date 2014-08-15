@@ -1,6 +1,6 @@
 ﻿/**
  * GESTURES.IO - AS3 Wrapper
- * @version 1.7.0
+ * @version 1.4.4
  * @author MediaStanza
  */
 package io.gestures 
