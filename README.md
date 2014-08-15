@@ -26,5 +26,3 @@ _(FlashDevelop projects, tested with the latest 13.0 SDK from Adobe)_
 &nbsp;
 
 ### All docs online: http://gestures.io/develop
-
-Last update: 2014, Jul 9th
